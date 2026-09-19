@@ -814,4 +814,12 @@ The emphasis is on integrating machine learning with software engineering, datab
 
 ## Author
 
-Developed as an AI/ML and software engineering project focused on financial transaction risk intelligence.
+Shubhechchha Hazra
+National Institute of Technology, Raipur
+
+AI/ML | Data Science | Software Engineering
+
+Connect
+GitHub: shubhechchha232-codecommitqueen
+LinkedIn: Shubhechchha Hazra
+Email: shubhechchha232@gmail.com
