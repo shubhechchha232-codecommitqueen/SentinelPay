@@ -60,3 +60,6 @@ dist/
 *.db
 *.sqlite
 *.sqlite3
+# Project datasets
+data/raw/*.csv
+data/processed/*.csv
