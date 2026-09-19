@@ -820,5 +820,6 @@ National Institute of Technology, Raipur
 AI/ML | Data Science | Software Engineering
 
 Connect
-LinkedIn: Shubhechchha Hazra
+GitHub: https://github.com/shubhechchha232-codecommitqueen
+LinkedIn: https://www.linkedin.com/in/shubhechchha232
 Email: shubhechchha232@gmail.com
