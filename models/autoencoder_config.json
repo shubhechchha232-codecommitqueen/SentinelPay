@@ -1,0 +1,8 @@
+{
+    "input_dimension": 38,
+    "threshold": 0.9895605444908142,
+    "epochs": 20,
+    "batch_size": 512,
+    "latent_dimension": 16,
+    "training_samples": 150000
+}

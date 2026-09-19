@@ -1,0 +1,15 @@
+{
+    "random_forest": {
+        "roc_auc": 0.9574639366239645,
+        "pr_auc": 0.806185428552521
+    },
+    "xgboost": {
+        "roc_auc": 0.9752053431490502,
+        "pr_auc": 0.8184243668955751
+    },
+    "dataset": {
+        "total_transactions": 283726,
+        "fraud_transactions": 473,
+        "fraud_percentage": 0.1667101358352777
+    }
+}
