@@ -1,336 +1,441 @@
 # SentinelPay
 
-AI-Powered Real-Time Fraud and Anomaly Detection Platform
+### AI-Powered Real-Time Fraud & Anomaly Detection Platform
 
-SentinelPay is an end-to-end transaction risk intelligence system designed to detect potentially fraudulent and anomalous financial transactions using supervised machine learning, unsupervised anomaly detection, behavioral features, PostgreSQL, FastAPI, and an interactive Streamlit dashboard.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/FastAPI-API-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Scikit--learn-ML-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white"/>
+</p>
 
-The system combines multiple detection signals into a unified transaction-level risk assessment rather than relying on a single fraud classifier.
+<p align="center">
+  <img src="https://img.shields.io/badge/XGBoost-Gradient%20Boosting-FF6600?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Git-GitHub-F05032?style=for-the-badge&logo=git&logoColor=white"/>
+</p>
 
----
+<p align="center">
+  <b>Detect → Analyze → Score → Explain → Alert</b>
+</p>
 
-## 1. Project Overview
-
-Financial fraud detection is challenging because fraudulent transactions are rare, transaction behavior changes over time, and suspicious activity may not always match previously observed fraud patterns.
-
-SentinelPay addresses this problem through a hybrid detection architecture that combines:
-
-- Supervised fraud classification
-- Unsupervised anomaly detection
-- Transaction-level feature engineering
-- Behavioral risk signals
-- PostgreSQL-based transaction storage
-- FastAPI inference services
-- Streamlit-based monitoring and analysis
-
-The final output is a transaction-level risk assessment containing fraud probability, anomaly score, final risk score, risk level, and detection reasons.
-
----
-
-## 2. Problem Statement
-
-Traditional fraud detection systems may depend heavily on historical fraud labels.
-
-This creates two important challenges:
-
-1. New fraud patterns may not have sufficient historical examples.
-2. Unusual but previously unseen transaction behavior may be missed.
-
-SentinelPay therefore treats fraud detection as a multi-signal risk intelligence problem.
-
-The system evaluates both:
-
-- "Does this transaction resemble previously known fraud?"
-- "Does this transaction behave abnormally compared with normal transaction patterns?"
-
-These signals are combined by a risk engine to produce a final transaction risk score.
+<p align="center">
+  An end-to-end fraud intelligence platform combining machine learning,
+  anomaly detection, behavioral analytics, risk scoring,
+  PostgreSQL persistence and API-driven monitoring.
+</p>
 
 ---
 
-## 3. Solution Architecture
+## 🛡️ Overview
+
+**SentinelPay** is an AI-powered fraud detection and risk intelligence platform designed to transform transaction data into actionable risk signals.
+
+Instead of treating fraud detection as a simple:
+
+```text
+Transaction → Fraud / Not Fraud
+```
+
+SentinelPay follows a multi-layer intelligence pipeline:
+
+```text
+Transaction
+     ↓
+Data Processing
+     ↓
+Feature Engineering
+     ↓
+Supervised ML ─────────┐
+                       ├──→ Risk Fusion Engine
+Anomaly Detection ────┘
+                       ↓
+                Final Risk Score
+                       ↓
+             Prediction + Explanation
+                       ↓
+                 Alert Generation
+                       ↓
+          PostgreSQL + FastAPI + Dashboard
+```
+
+---
+
+## 🎯 Why SentinelPay?
+
+Financial fraud is rarely defined by a single signal.
+
+A transaction can become suspicious because of a combination of:
+
+* Unusual transaction amount
+* Abnormal transaction frequency
+* Amount deviation
+* Behavioral patterns
+* Machine-learning fraud probability
+* Anomaly characteristics
+
+SentinelPay combines these signals into a unified risk intelligence layer rather than depending exclusively on a single classification output.
+
+---
+
+# 🧠 System Architecture
 
 ```text
                          SENTINELPAY
-                  TRANSACTION RISK INTELLIGENCE
-                              |
-                              v
-                    +-------------------+
-                    | Raw Transactions  |
-                    +---------+---------+
-                              |
-                              v
-                 +------------------------+
-                 | Data Validation &      |
-                 | Preprocessing          |
-                 +-----------+------------+
-                             |
-                             v
-                 +------------------------+
-                 | Feature Engineering    |
-                 |                        |
-                 | Amount Features         |
-                 | Behavioral Features    |
-                 | Statistical Features  |
-                 | PCA-derived Features  |
-                 +-----------+------------+
-                             |
-                +------------+------------+
-                |                         |
-                v                         v
-       +------------------+     +---------------------+
-       | Supervised ML    |     | Anomaly Detection  |
-       |                  |     |                     |
-       | XGBoost          |     | PyTorch Autoencoder |
-       | Random Forest    |     | Reconstruction      |
-       +--------+---------+     +----------+----------+
-                |                          |
-                | Fraud Probability        | Anomaly Score
-                +------------+-------------+
-                             |
-                             v
-                    +------------------+
-                    | Risk Engine      |
-                    |                  |
-                    | Signal Fusion    |
-                    | Risk Calculation |
-                    +--------+---------+
-                             |
-                             v
-                    +------------------+
-                    | Final Risk Score |
-                    +--------+---------+
-                             |
-                 +-----------+-----------+
-                 |                       |
-                 v                       v
-        +----------------+      +------------------+
-        | FastAPI        |      | PostgreSQL       |
-        | Inference API  |      | Persistence      |
-        +-------+--------+      +------------------+
-                |
-                v
-        +----------------------+
-        | Streamlit Dashboard  |
-        |                      |
-        | Transaction Analysis |
-        | Risk Analysis        |
-        | Model Information    |
-        +----------------------+
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │   Transaction Dataset   │
+                 │      Raw / Processed    │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │    Data Processing      │
+                 │                         │
+                 │ Cleaning & Validation   │
+                 │ Feature Engineering     │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+             ┌──────────────────────────────────┐
+             │         DETECTION LAYER          │
+             │                                  │
+             │  ┌────────────┐  ┌────────────┐ │
+             │  │ Supervised │  │  Anomaly   │ │
+             │  │    ML      │  │ Detection  │ │
+             │  └─────┬──────┘  └──────┬─────┘ │
+             └────────┼─────────────────┼───────┘
+                      │                 │
+                      └────────┬────────┘
+                               ▼
+                 ┌─────────────────────────┐
+                 │       RISK ENGINE       │
+                 │                         │
+                 │ ML Probability          │
+                 │ Anomaly Score           │
+                 │ Behavioral Signals      │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │     FINAL RISK SCORE    │
+                 │                         │
+                 │ LOW / MEDIUM / HIGH     │
+                 │        / CRITICAL       │
+                 └────────────┬────────────┘
+                              │
+                    ┌─────────┴─────────┐
+                    ▼                   ▼
+          ┌─────────────────┐   ┌─────────────────┐
+          │   PostgreSQL    │   │     FastAPI     │
+          │                 │   │                 │
+          │ Transactions    │   │ REST Endpoints  │
+          │ Predictions     │   │ Risk Analysis   │
+          │ Alerts          │   │ Monitoring      │
+          └────────┬────────┘   └────────┬────────┘
+                   │                     │
+                   └──────────┬──────────┘
+                              ▼
+                    ┌──────────────────┐
+                    │    Streamlit     │
+                    │  Risk Dashboard  │
+                    └──────────────────┘
 ```
 
 ---
 
-## 4. Hybrid Detection Strategy
+# 🔄 Detection Pipeline
 
-SentinelPay uses a hybrid supervised and unsupervised architecture.
+## 01 — Data Processing
 
-### Supervised Fraud Detection
+Raw transaction records are transformed into model-ready data.
 
-The supervised layer uses trained classification models to estimate the probability that a transaction belongs to the fraudulent class.
+The processing layer handles:
 
-Models included in the project:
-
-- XGBoost
-- Random Forest
-
-### Unsupervised Anomaly Detection
-
-A PyTorch Autoencoder is used to identify unusual transaction behavior.
-
-The Autoencoder learns a representation of transaction patterns and evaluates reconstruction error.
-
-A higher reconstruction error can indicate that a transaction differs from learned normal behavior.
-
-### Risk Fusion
-
-The outputs of the fraud classifier and anomaly detector are passed to the risk engine.
+* Data cleaning
+* Validation
+* Transformation
+* Feature preparation
+* Dataset generation
 
 ```text
-                 Transaction
-                      |
-          +-----------+-----------+
-          |                       |
-          v                       v
-   Fraud Classifier        Autoencoder
-          |                       |
-          v                       v
- Fraud Probability          Anomaly Score
-          |                       |
-          +-----------+-----------+
-                      |
-                      v
-                Risk Engine
-                      |
-                      v
-              Final Risk Score
-                      |
-          +-----------+-----------+
-          |           |           |
-          v           v           v
-        LOW        MEDIUM       HIGH
+Raw Transaction Data
+        ↓
+Validation
+        ↓
+Cleaning
+        ↓
+Processed Dataset
 ```
 
-This architecture allows SentinelPay to consider both known fraud patterns and unusual transaction behavior.
+---
+
+## 02 — Feature Engineering
+
+Transaction-level signals are transformed into analytical features.
+
+| Feature                    | Purpose                      |
+| -------------------------- | ---------------------------- |
+| Transaction Amount         | Monetary behavior            |
+| Log Amount                 | Distribution transformation  |
+| Amount Z-Score             | Amount deviation             |
+| Transaction Frequency      | Behavioral velocity          |
+| Average Transaction Amount | Customer baseline            |
+| PCA Features               | Feature-space representation |
+| Fraud Label                | Supervised learning target   |
 
 ---
 
-## 5. Key Features
+# 🤖 Machine Learning Layer
 
-### Real-Time Transaction Analysis
-
-Users can enter transaction-level features through the Streamlit interface and request an immediate risk assessment.
-
-The system returns:
-
-- Risk score
-- Risk level
-- Fraud probability
-- Anomaly probability
-- Reconstruction error
-- Detection reasons
-
-### Fraud Detection
-
-The supervised machine learning layer evaluates transaction characteristics against learned fraud patterns.
-
-### Anomaly Detection
-
-The Autoencoder evaluates whether transaction behavior is significantly different from learned patterns.
-
-### Behavioral Risk Analysis
-
-The system incorporates transaction behavior such as:
-
-- Transaction frequency
-- Average transaction amount
-- Amount deviation
-- Transaction amount statistics
-- PCA-derived statistical features
-
-### PostgreSQL Integration
-
-PostgreSQL stores:
-
-- Transactions
-- Predictions
-- Alerts
-
-This provides persistent storage for transaction analysis and model outputs.
-
-### FastAPI Inference Layer
-
-FastAPI exposes the model inference functionality through an API.
-
-This separates the model-serving layer from the user interface and makes the detection pipeline consumable by other applications.
-
-### Streamlit Dashboard
-
-The dashboard provides:
-
-- System overview
-- Transaction analysis
-- Risk analysis
-- Model information
-- API status
-- Detection results
-
----
-
-## 6. Database Architecture
-
-SentinelPay uses PostgreSQL for structured storage.
-
-### Transactions
-
-Stores transaction-level input and engineered features.
-
-Important fields include:
-
-- transaction_id
-- transaction_time
-- amount
-- amount_log
-- amount_zscore
-- transaction_frequency_24h
-- avg_transaction_amount
-- amount_deviation
-- PCA-derived features
-- is_fraud
-
-### Predictions
-
-Stores model inference results.
-
-Important fields include:
-
-- transaction_id
-- fraud_probability
-- anomaly_score
-- final_risk_score
-- prediction
-- model_version
-- created_at
-
-### Alerts
-
-Stores risk alerts generated by the system.
-
-Important fields include:
-
-- transaction_id
-- risk_score
-- alert_level
-- alert_reason
-- status
-- created_at
-
-Database relationships:
+SentinelPay uses a hybrid detection architecture.
 
 ```text
-                 +----------------+
-                 |  transactions  |
-                 +-------+--------+
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-      +---------------+     +---------------+
-      | predictions   |     |    alerts     |
-      +---------------+     +---------------+
+                 Transaction Features
+                         │
+            ┌────────────┴────────────┐
+            ▼                         ▼
+      Supervised ML            Anomaly Detection
+            │                         │
+            ▼                         ▼
+     Fraud Probability         Anomaly Score
+            │                         │
+            └────────────┬────────────┘
+                         ▼
+                  Risk Engine
 ```
 
-The SQL implementation is available in:
+## Supervised Fraud Detection
+
+The supervised layer learns patterns associated with known fraudulent transactions.
+
+The project uses technologies including:
+
+* Scikit-learn
+* XGBoost
+* PyTorch
+
+The output is a fraud probability:
+
+```text
+P(Fraud | Transaction)
+```
+
+This probability becomes an input to the downstream risk engine.
+
+---
+
+## 🔎 Anomaly Detection
+
+Known fraud patterns are not the only source of risk.
+
+The anomaly layer identifies transaction behavior that deviates from expected patterns.
+
+Examples include:
+
+```text
+Unusual Amount
+      ↓
+Abnormal Frequency
+      ↓
+Behavioral Deviation
+      ↓
+Feature-Space Irregularity
+      ↓
+Anomaly Score
+```
+
+This provides a complementary detection perspective alongside supervised classification.
+
+---
+
+# 🎯 Risk Fusion Engine
+
+The risk engine acts as the central intelligence layer.
+
+```text
+              ML Probability
+                    │
+                    ▼
+             ┌─────────────┐
+             │             │
+Anomaly ────►│ Risk Engine │◄──── Behavioral Signals
+             │             │
+             └──────┬──────┘
+                    │
+                    ▼
+             Final Risk Score
+```
+
+The architecture separates three concepts:
+
+### Prediction
+
+What does the supervised model estimate?
+
+### Anomaly
+
+How unusual is the transaction?
+
+### Risk
+
+What combined risk signal is produced by the detection pipeline?
+
+This separation makes the architecture easier to extend and monitor.
+
+---
+
+# 🚨 Alert Intelligence
+
+High-risk transactions can generate structured alerts containing:
+
+* Transaction ID
+* Risk score
+* Alert level
+* Alert reason
+* Timestamp
+* Status
+
+```text
+Transaction
+     ↓
+Risk Score
+     ↓
+Risk Threshold
+     ↓
+Alert Generation
+     ↓
+PostgreSQL
+     ↓
+API / Dashboard
+```
+
+---
+
+# 🗄️ PostgreSQL Data Layer
+
+PostgreSQL acts as the persistent analytical backend.
+
+The core database model contains three primary entities:
+
+```text
+                    transactions
+                         │
+              ┌──────────┴──────────┐
+              ▼                     ▼
+        predictions              alerts
+```
+
+### transactions
+
+Stores transaction-level features and fraud labels.
+
+### predictions
+
+Stores:
+
+* Fraud probability
+* Anomaly score
+* Final risk score
+* Prediction
+* Model version
+* Timestamp
+
+### alerts
+
+Stores:
+
+* Risk score
+* Alert level
+* Alert reason
+* Status
+* Timestamp
+
+Indexes are maintained for frequently queried fields such as transaction ID, timestamp, fraud label, amount and alert status.
+
+---
+
+# 🧱 Database Schema
+
+The PostgreSQL schema is maintained separately in:
 
 ```text
 sql/schema.sql
 ```
 
-Analytical SQL queries are maintained separately in:
+This keeps the database architecture version-controlled, modular and reproducible.
+
+---
+
+# ⚡ FastAPI Layer
+
+SentinelPay exposes its intelligence layer through FastAPI.
 
 ```text
-sql/analysis_queries.sql
+PostgreSQL
+     ↓
+ML / Detection Layer
+     ↓
+Risk Engine
+     ↓
+FastAPI
+     ↓
+Dashboard / Client
+```
+
+The API layer is designed to make the detection engine easier to integrate with:
+
+* Payment systems
+* Financial applications
+* Fraud investigation platforms
+* Risk monitoring tools
+* Internal analytics systems
+
+FastAPI also provides interactive API documentation through Swagger UI.
+
+```text
+http://127.0.0.1:8000/docs
 ```
 
 ---
 
-## 7. Technology Stack
+# 📊 Streamlit Dashboard
 
-| Layer | Technology |
-|---|---|
-| Programming Language | Python |
-| Data Processing | Pandas, NumPy |
-| Machine Learning | Scikit-learn, XGBoost |
-| Deep Learning | PyTorch |
-| Backend API | FastAPI |
-| Database | PostgreSQL |
-| Database Interface | pgAdmin |
-| Dashboard | Streamlit |
-| Visualization | Matplotlib |
-| Version Control | Git |
-| Repository | GitHub |
+The Streamlit dashboard provides an interactive monitoring layer for exploring:
+
+* Transaction activity
+* Fraud patterns
+* Risk scores
+* Anomaly signals
+* Alerts
+* Model outputs
+
+The objective is to translate model-level outputs into an interpretable monitoring experience.
 
 ---
 
-## 8. Project Structure
+# 🧰 Technology Stack
+
+| Layer             | Technology           |
+| ----------------- | -------------------- |
+| Programming       | Python               |
+| Data Processing   | Pandas, NumPy        |
+| Machine Learning  | Scikit-learn         |
+| Gradient Boosting | XGBoost              |
+| Deep Learning     | PyTorch              |
+| Database          | PostgreSQL           |
+| Database Access   | SQLAlchemy, Psycopg2 |
+| Backend API       | FastAPI              |
+| API Server        | Uvicorn              |
+| Dashboard         | Streamlit            |
+| Configuration     | python-dotenv        |
+| Version Control   | Git / GitHub         |
+
+---
+
+# 📁 Project Structure
 
 ```text
 SentinelPay/
@@ -340,35 +445,22 @@ SentinelPay/
 │
 ├── data/
 │   ├── raw/
-│   │   └── creditcard.csv
-│   │
 │   └── processed/
-│       └── transactions_clean.csv
 │
 ├── models/
-│   ├── autoencoder_config.json
-│   ├── autoencoder_scaler.pkl
-│   ├── feature_columns.json
-│   ├── feature_scaler.pkl
-│   ├── fraud_autoencoder.pth
-│   ├── model_metrics.json
-│   ├── random_forest.pkl
-│   └── xgboost_fraud_model.pkl
-│
-├── scripts/
+│   └── trained_models/
 │
 ├── sql/
-│   ├── schema.sql
-│   └── analysis_queries.sql
+│   └── schema.sql
 │
 ├── src/
-│   ├── api.py
-│   ├── inspect_data.py
-│   ├── load_to_postgres.py
-│   ├── preprocess_data.py
+│   ├── data_processing.py
+│   ├── feature_engineering.py
+│   ├── train_model.py
+│   ├── anomaly_detection.py
 │   ├── risk_engine.py
-│   ├── train_autoencoder.py
-│   └── train_models.py
+│   ├── load_to_postgres.py
+│   └── api.py
 │
 ├── .env.example
 ├── .gitignore
@@ -378,448 +470,323 @@ SentinelPay/
 
 ---
 
-## 9. Dataset
+# 🚀 Local Setup
 
-The project uses transaction data containing numerical transaction features and fraud labels.
-
-The processed database currently contains:
-
-- Total transactions: 283,726
-- Fraud cases: 473
-- Fraud rate: approximately 0.1667%
-
-The dataset is highly imbalanced, which reflects an important characteristic of real-world fraud detection systems.
-
-Because fraudulent transactions represent a small fraction of total transactions, accuracy alone is not sufficient for evaluating the usefulness of a fraud detection system.
-
----
-
-## 10. Machine Learning Pipeline
-
-The machine learning workflow follows the sequence:
-
-```text
-Raw Dataset
-     |
-     v
-Data Inspection
-     |
-     v
-Data Cleaning
-     |
-     v
-Feature Engineering
-     |
-     v
-Feature Scaling
-     |
-     +-----------------------+
-     |                       |
-     v                       v
-Fraud Classification    Autoencoder
-     |                       |
-     v                       v
-Fraud Probability       Anomaly Score
-     |                       |
-     +-----------+-----------+
-                 |
-                 v
-             Risk Engine
-                 |
-                 v
-          Final Risk Score
-```
-
-The project separates preprocessing, model training, anomaly detection, and risk calculation into different Python modules.
-
----
-
-## 11. Risk Engine
-
-The risk engine acts as the decision layer between the machine learning models and the application.
-
-Conceptually:
-
-```text
-Fraud Signal
-     +
-Anomaly Signal
-     +
-Behavioral Signals
-     |
-     v
-Risk Engine
-     |
-     v
-Final Risk Score
-     |
-     +--------+---------+
-              |
-        Risk Classification
-              |
-       +------+------+
-       |      |      |
-      LOW   MEDIUM   HIGH
-```
-
-This design allows additional risk signals to be incorporated without redesigning the complete machine learning pipeline.
-
----
-
-## 12. FastAPI Service
-
-The FastAPI application provides the model inference layer.
-
-The API receives transaction features and returns the corresponding risk assessment.
-
-Example API architecture:
-
-```text
-Client / Dashboard
-        |
-        v
-     FastAPI
-        |
-        v
-  Feature Processing
-        |
-        +----------------+
-        |                |
-        v                v
- Fraud Model       Autoencoder
-        |                |
-        +-------+--------+
-                |
-                v
-            Risk Engine
-                |
-                v
-          JSON Response
-```
-
-The FastAPI application is located at:
-
-```text
-src/api.py
-```
-
----
-
-## 13. Streamlit Dashboard
-
-The Streamlit application provides the user-facing interface.
-
-Main sections include:
-
-### Dashboard
-
-Provides an overview of the transaction monitoring system.
-
-### Transaction Analysis
-
-Allows users to enter transaction information and request risk analysis.
-
-### Risk Analysis
-
-Displays:
-
-- Risk score
-- Risk level
-- Fraud probability
-- Anomaly probability
-- Reconstruction error
-- Detection reasons
-
-### Model Information
-
-Displays the models and architecture used by SentinelPay.
-
-The dashboard is implemented in:
-
-```text
-dashboard/app.py
-```
-
----
-
-## 14. Installation
-
-Clone the repository:
+## 1. Clone the Repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/shubhechchha232-codecommitqueen/SentinelPay.git
 cd SentinelPay
 ```
 
-Create and activate a Python virtual environment:
-
-```bash
-python -m venv venv
-```
+## 2. Create a Virtual Environment
 
 Windows:
 
 ```bash
+python -m venv venv
 venv\Scripts\activate
 ```
 
-Install dependencies:
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
+## 4. Configure Environment Variables
+
+Create a local `.env` file:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=sentinelpay
+DB_USER=postgres
+DB_PASSWORD=YOUR_POSTGRES_PASSWORD
+```
+
+Never commit the real `.env` file to GitHub.
+
 ---
 
-## 15. Database Configuration
+# 🗄️ PostgreSQL Setup
 
-Create a PostgreSQL database for SentinelPay.
+Create a PostgreSQL database named:
 
-The database schema is provided in:
+```text
+sentinelpay
+```
+
+Then execute:
 
 ```text
 sql/schema.sql
 ```
 
-Run the schema using pgAdmin or the PostgreSQL Query Tool.
+using pgAdmin or another PostgreSQL client.
 
-The schema creates the required tables for:
-
-- Transactions
-- Predictions
-- Alerts
-
-Do not commit database passwords or private credentials to GitHub.
-
-Use the provided environment template:
+The schema creates the required:
 
 ```text
-.env.example
+Tables
+Relationships
+Indexes
+Constraints
 ```
-
-Create a local `.env` file containing your own database configuration.
-
-Example:
-
-```text
-DATABASE_URL=your_database_connection_string
-```
-
-The actual `.env` file should remain private and should not be uploaded to GitHub.
 
 ---
 
-## 16. Running the Project
+# ▶️ Running the Pipeline
 
-### Start the FastAPI service
+### Data Processing
 
-From the project root:
+```bash
+python src/data_processing.py
+```
+
+### Model Training
+
+```bash
+python src/train_model.py
+```
+
+### Anomaly Detection
+
+```bash
+python src/anomaly_detection.py
+```
+
+### Risk Engine
+
+```bash
+python src/risk_engine.py
+```
+
+### PostgreSQL Loader
+
+```bash
+python src/load_to_postgres.py
+```
+
+### Start FastAPI
 
 ```bash
 uvicorn src.api:app --reload
 ```
 
-The FastAPI service will run locally.
+Open:
 
-The interactive API documentation can be accessed through the FastAPI Swagger interface.
+```text
+http://127.0.0.1:8000/docs
+```
 
-### Start the Streamlit dashboard
-
-Open a second terminal and activate the virtual environment.
-
-Then run:
+### Start Dashboard
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-The Streamlit dashboard will open in the browser.
-
-Both services should be running when the dashboard is configured to communicate with the FastAPI inference endpoint.
-
 ---
 
-## 17. Configuration
+# 📦 Data Management
 
-Environment-specific configuration should be stored in `.env`.
+Large raw and processed CSV datasets are intentionally excluded from the public repository because they exceed GitHub's standard per-file size limit.
 
-A template is provided through:
+Expected local structure:
 
 ```text
-.env.example
+data/
+├── raw/
+│   └── creditcard.csv
+│
+└── processed/
+    └── transactions_clean.csv
 ```
 
-Sensitive values such as:
+The datasets remain available locally for:
 
-- Database passwords
-- API keys
-- Private credentials
-- Local secrets
+* Model training
+* Data processing
+* PostgreSQL loading
+* Testing
 
-should never be committed to the repository.
-
----
-
-## 18. SQL Analytics
-
-The repository contains a separate SQL analysis file:
+The public repository therefore focuses on the reusable engineering layer:
 
 ```text
-sql/analysis_queries.sql
-```
-
-It contains analytical queries for examining:
-
-- Total transaction volume
-- Fraud transaction count
-- Fraud percentage
-- Transaction samples
-- Fraud distribution
-
-This keeps database analysis reproducible and separates SQL analytics from the application code.
-
----
-
-## 19. Model Information
-
-SentinelPay currently integrates three primary models:
-
-```text
-1. XGBoost
-2. Random Forest
-3. PyTorch Autoencoder
-```
-
-The architecture can therefore be viewed as:
-
-```text
-             SentinelPay Models
-                    |
-        +-----------+-----------+
-        |                       |
-        v                       v
- Supervised Models       Unsupervised Model
-        |                       |
-   +----+----+                  |
-   |         |                  |
-   v         v                  v
-XGBoost  Random Forest     Autoencoder
-   |         |                  |
-   +----+----+------------------+
-             |
-             v
-        Risk Engine
+Source Code
+SQL Schema
+Configuration
+Dependencies
+Documentation
 ```
 
 ---
 
-## 20. Design Principles
+# 🧩 Engineering Principles
 
-The project follows several engineering principles:
+### Modular Architecture
 
-### Modularity
-
-Data processing, model training, inference, risk calculation, SQL, and dashboard components are separated.
+Data processing, machine learning, anomaly detection, risk scoring, API services and visualization are separated into independent components.
 
 ### Reproducibility
 
-Dependencies, SQL schemas, preprocessing scripts, and model artifacts are maintained inside the project structure.
+Dependencies are maintained in `requirements.txt`, while environment configuration is externalized through `.env`.
 
-### Separation of Concerns
+### Persistent Intelligence
 
-The dashboard is separated from the FastAPI inference layer.
-
-### Persistence
-
-Transaction and prediction information can be stored in PostgreSQL rather than remaining only in application memory.
+Transactions, predictions and alerts are stored independently from model execution.
 
 ### Extensibility
 
-Additional fraud models, anomaly detectors, behavioral signals, and alerting mechanisms can be incorporated into the architecture.
+The architecture allows new models and detection strategies to be introduced without redesigning the complete application.
 
----
+### Operational Orientation
 
-## 21. Why SentinelPay?
-
-SentinelPay is designed as more than a standalone machine learning classifier.
-
-The project connects:
+The system is structured around:
 
 ```text
-Machine Learning
-       +
-Anomaly Detection
-       +
-Feature Engineering
-       +
-Risk Engineering
-       +
-PostgreSQL
-       +
-FastAPI
-       +
-Streamlit
+Detection
+   ↓
+Risk Scoring
+   ↓
+Persistence
+   ↓
+API
+   ↓
+Monitoring
+   ↓
+Alerts
 ```
-
-This creates an end-to-end transaction intelligence workflow covering data processing, model inference, risk calculation, persistence, API serving, and visualization.
 
 ---
 
-## 22. Future Enhancements
+# 💡 What Makes SentinelPay Different?
+
+A conventional introductory fraud-detection project often follows:
+
+```text
+Dataset
+   ↓
+Train Model
+   ↓
+Predict
+   ↓
+Accuracy
+```
+
+SentinelPay expands the workflow into a broader engineering system:
+
+```text
+              Transaction Data
+                     │
+                     ▼
+              Data Processing
+                     │
+                     ▼
+             Feature Engineering
+                     │
+             ┌───────┴────────┐
+             ▼                ▼
+       Supervised ML    Anomaly Detection
+             │                │
+             └───────┬────────┘
+                     ▼
+                Risk Engine
+                     │
+                     ▼
+                 Risk Score
+                     │
+              ┌──────┴──────┐
+              ▼             ▼
+         PostgreSQL       FastAPI
+              │             │
+              └──────┬──────┘
+                     ▼
+                 Dashboard
+                     │
+                     ▼
+                   Alerts
+```
+
+The focus is therefore not only on model training, but on integrating machine learning into a complete:
+
+```text
+Data → ML → Backend → Database → Risk → Monitoring
+```
+
+workflow.
+
+---
+
+# ✨ Key Highlights
+
+| Capability                  | SentinelPay |
+| --------------------------- | ----------- |
+| Supervised Machine Learning | ✓           |
+| Anomaly Detection           | ✓           |
+| Feature Engineering         | ✓           |
+| Risk Fusion Engine          | ✓           |
+| Alert Generation            | ✓           |
+| PostgreSQL Persistence      | ✓           |
+| FastAPI Backend             | ✓           |
+| Streamlit Dashboard         | ✓           |
+| Environment Configuration   | ✓           |
+| Modular Architecture        | ✓           |
+| Reproducible Setup          | ✓           |
+
+---
+
+# 🔮 Future Roadmap
+
+The architecture can evolve toward real-time transaction intelligence.
+
+```text
+Real-Time Transaction
+          ↓
+Event Stream
+          ↓
+Online Feature Engineering
+          ↓
+Model Inference
+          ↓
+Dynamic Risk Score
+          ↓
+Automated Alerting
+          ↓
+Fraud Analyst Dashboard
+```
 
 Potential extensions include:
 
-- Real-time transaction streaming
-- Kafka-based event ingestion
-- Redis-based low-latency feature storage
-- Model monitoring
-- Data drift detection
-- Automated alert notifications
-- SHAP-based model explainability
-- Role-based dashboard access
-- Historical customer behavior profiling
-- Continuous model retraining
-- Containerized deployment using Docker
-- Cloud deployment
-- API authentication and rate limiting
+* Real-time transaction streaming
+* Kafka integration
+* Redis caching
+* Online feature engineering
+* Model monitoring
+* Concept-drift detection
+* SHAP-based explanations
+* Feature-store integration
+* Docker deployment
+* CI/CD automation
+* Cloud deployment
+* Analyst feedback loops
+* Continuous model improvement
 
 ---
 
-## 23. Project Status
+# 👩‍💻 Author
 
-Current implementation includes:
+## Shubhechchha Hazra
 
-- Transaction preprocessing
-- Feature engineering
-- Supervised fraud models
-- Autoencoder-based anomaly detection
-- Risk engine
-- PostgreSQL schema
-- FastAPI inference service
-- Streamlit dashboard
-- SQL analytics
-- Model artifacts
-- Environment configuration
-- Reproducible dependency specification
+**B.Tech — Biomedical Engineering**
+**National Institute of Technology, Raipur**
 
----
+GitHub:
+https://github.com/shubhechchha-23
 
-## 24. Repository Purpose
+LinkedIn:
+https://www.linkedin.com/in/shubhechchha232
 
-This repository demonstrates the design and implementation of an end-to-end AI-based fraud and anomaly detection platform.
-
-The emphasis is on integrating machine learning with software engineering, database systems, backend APIs, and an operational dashboard rather than presenting a machine learning model in isolation.
-
----
-
-## Author
-
-Shubhechchha Hazra
-National Institute of Technology, Raipur
-
-AI/ML | Data Science | Software Engineering
-
-Connect
-GitHub: https://github.com/shubhechchha-23
-LinkedIn: https://www.linkedin.com/in/shubhechchha232
-Email: shubhechchha232@gmail.com
+Email:
+[shubhechchha232@gmail.com](mailto:shubhechchha232@gmail.com)
